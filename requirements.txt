@@ -1,0 +1,5 @@
+pytest
+Pillow          # For GUI images or icons
+validators      # For email, student ID, or other input validation
+rich            # For enhancing CLI output
+pytest-mock     # For mocking in tests
