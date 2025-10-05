@@ -2,7 +2,7 @@
 
 # Email Pattern Requirement: Must end with @university.com [cite: 91]
 # Allows letters, numbers, dots, and underscores before the @.
-EMAIL_PATTERN = r"^[a-zA-Z0-9._-]+@university\.com$"
+EMAIL_PATTERN = r"^[A-Za-z]+[._-][A-Za-z]+@university\.com$"
 
 # Password Pattern Requirements: [cite: 94]
 # 1. ^[A-Z]       : Starts with an upper-case character.

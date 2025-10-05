@@ -1,7 +1,7 @@
 # utils/validator.py
 import re
 import random
-import patterns as p
+import utils.patterns as p
 
 class Validator:
 
