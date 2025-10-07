@@ -2,29 +2,29 @@
 
 class System:
     def __init__(self):
-        # 暂时留空，后续用于初始化 Subsystem 实例
+        # Placeholder for initializing Subsystem instances (StudentSubsystem, AdminSubsystem)
         pass
 
-    # 1. 主菜单方法：startCLI() - University Menu
+    # 1. Main Menu Method: startCLI() - University Menu
     def startCLI(self):
         while True:
             print("\n==================================")
             print("  Welcome to University App CLI")
             print("==================================")
-            print("A: Admin System")    # <--- 跳转到 Admin 菜单
-            print("S: Student System")  # <--- 跳转到 Student 菜单
+            print("A: Admin System")    # <--- Navigate to Admin Menu
+            print("S: Student System")  # <--- Navigate to Student Menu
             print("X: Exit Application")
             print("----------------------------------")
 
-            # .strip().upper() 用于规范化输入
+            # .strip().upper() ensures clean input regardless of case or whitespace
             choice = input("Enter your choice: ").strip().upper()
 
             if choice == 'A':
-                # 任务要求：实现 Admin 菜单导航
+                # Required navigation for Admin Menu (Ved's task)
                 self.admin_system_menu()
 
             elif choice == 'S':
-                # 调用您的学生子菜单方法
+                # Call the student sub-menu method
                 self.student_system_menu()
 
             elif choice == 'X':
@@ -33,12 +33,12 @@ class System:
             else:
                 print("Invalid choice. Please enter A, S, or X.")
 
-    # 2. 学生子菜单方法：student_system_menu() (Suzy 的主要菜单)
+    # 2. Student Sub-Menu Method: student_system_menu() (Suzy's main focus)
     def student_system_menu(self):
         while True:
             print("\n--- Student System Menu ---")
-            print("L: Login")      # <-- Week 2 逻辑
-            print("R: Register")   # <-- Week 2 逻辑
+            print("L: Login")      # <-- Week 2 Logic
+            print("R: Register")   # <-- Week 2 Logic
             print("X: Return to Main Menu")
             print("---------------------------")
 
@@ -53,14 +53,27 @@ class System:
                 # self.student_subsystem.register_prompt()
 
             elif choice == 'X':
-                break  # 返回到 startCLI() 中的主循环
+                break  # Returns to the main startCLI() loop
 
             else:
                 print("Invalid choice. Please enter L, R, or X.")
 
-    # 3. Admin 占位符方法：admin_system_menu() (满足导航要求)
+    # 3. Admin Placeholder Method: admin_system_menu() (Fulfills navigation requirement)
     def admin_system_menu(self):
         while True:
-            print("\n--- Admin System Menu (Ved's Task) ---")
+            print("\n--- Admin System Menu (Ved's Task Placeholder) ---")
             print("X: Return to Main Menu")
-            print("--------------------------------------")
+            print("--------------------------------------------------")
+            
+            choice = input("Enter your choice: ").strip().upper()
+            
+            if choice == 'X':
+                break  # Returns to the main startCLI() loop
+            else:
+                print("Invalid choice. Please enter X.")
+
+
+# Application entry point (starts the CLI when main.py is run directly)
+if __name__ == "__main__":
+    app = System()
+    app.startCLI()
