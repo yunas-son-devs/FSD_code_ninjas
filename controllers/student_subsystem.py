@@ -1,9 +1,9 @@
 # controllers/student_subsystem.py
 
 # --- Dependencies from teammates (Assumed to be in the 'main' branch) ---
-from utils.validator import Validator      # Yuna's validation tools
+import utils.validator as validator       # Yuna's validation tools
 from controllers.data_manager import DataManager  # Ved's data persistence tools
-from models.student import Student         # Vipin's Student model structure
+import models.student as student_model #         # Vipin's Student model structure
 
 
 class StudentSubsystem:
@@ -19,7 +19,7 @@ class StudentSubsystem:
         # 1. Input Validation (Depends on Yuna's Validator)
         
         # Check email format
-        if not Validator.validateEmail(email):
+        if not validator.validateEmail(email):
             print("Registration failed: Invalid email format.")
             return False
 
@@ -39,7 +39,7 @@ class StudentSubsystem:
         # 3. Create New Student Object (Depends on Yuna's ID generator and Vipin's Model)
         
         # Get a unique ID (Depends on Yuna's Validator)
-        student_id = Validator.generateStudentID() 
+        student_id = validator.generateStudentID()
 
         # Create a new Student instance (Depends on Vipin's Student model)
         try:

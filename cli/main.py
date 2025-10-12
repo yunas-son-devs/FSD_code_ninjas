@@ -1,8 +1,12 @@
 # cli/main.py
+# cli/main.py 的文件顶部
+from controllers.student_subsystem import StudentSubsystem
 
+# ...  class System  ...
 class System:
     def __init__(self):
-        # Placeholder for initializing Subsystem instances (StudentSubsystem, AdminSubsystem)
+        
+        self.student_subsystem = StudentSubsystem() 
         pass
 
     # 1. Main Menu Method: startCLI() - University Menu
