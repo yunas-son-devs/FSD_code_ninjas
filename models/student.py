@@ -1,12 +1,12 @@
 # models/student.py
 from dataclasses import dataclass, field
 from typing import List
-import random
+from utils.validator import Validator           # ← use central ID generator
 from models.subject import Subject
 
 @dataclass
 class Student:
-    id: str                   # "000001".."999999"
+    id: str
     name: str
     email: str
     password: str
@@ -17,8 +17,9 @@ class Student:
     MAX_SUBJECTS: int = 4
 
     @staticmethod
-    def generate_id() -> str:
-        return f"{random.randint(1, 999_999):06d}"
+    def generateStudentID() -> str:
+        """Get a random 6-digit Student ID from Validator"""
+        return Validator.generateStudentID()
 
     def hasMaxSubjects(self) -> bool:
         return len(self.subjects) >= self.MAX_SUBJECTS
