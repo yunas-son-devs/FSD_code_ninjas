@@ -16,6 +16,22 @@ class Student:
 
     MAX_SUBJECTS: int = 4
 
+    def update_average_mark(self) -> None:
+        """Recalculate the student's overall average from enrolled subjects."""
+        if not self.subjects:
+            self.average_mark = 0.0
+            return
+        total = sum(s.mark for s in self.subjects)
+        self.average_mark = round(total / len(self.subjects), 2)
+
+    def determine_pass_fail_status(self) -> None:
+        """Set PASS if average >= 50 else FAIL."""
+        self.pass_fail = "PASS" if self.average_mark >= 50 else "FAIL"
+
+
+
+
+
     @staticmethod
     def generateStudentID() -> str:
         """Get a random 6-digit Student ID from Validator"""
