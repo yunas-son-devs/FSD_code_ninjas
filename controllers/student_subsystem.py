@@ -1,5 +1,3 @@
-# controllers/student_subsystem.py
-
 from typing import List, Dict
 from models.student import Student
 from models.subject import Subject
