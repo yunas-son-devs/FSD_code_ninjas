@@ -16,7 +16,7 @@ emails = [
     "123@university.com",        # invalid
 ]
 for email in emails:
-    print(f"{email}: {Validator.validateEmail(email)}")
+    print(f"{email}: {Validator.validate_email(email)}")
 
 # Test 2: Password validation
 print("\n=== Password Validation ===")
@@ -28,10 +28,10 @@ passwords = [
     "Abcde12",      # ❌ invalid 
 ]
 for pwd in passwords:
-    print(f"{pwd}: {Validator.validatePassword(pwd)}")
+    print(f"{pwd}: {Validator.validate_password(pwd)}")
 
-# ✅ Test 3: Student ID generation
+# Test 3: Student ID generation
 print("\n=== Student ID Generation ===")
 existing = {"000001", "000002", "999999"}
-new_id = Validator.generateStudentID(existing)
+new_id = Validator.generate_student_id(existing)
 print(f"Generated ID: {new_id} (not in {existing})")
