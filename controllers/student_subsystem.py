@@ -78,7 +78,7 @@ class StudentSubsystem:
             return {"success": False, "message": "Error: No user is currently logged in."}
 
     # ---------------- Password Management (Vipin's Logic - Kept from HEAD) ----------------
-    def changePassword(self, new_password: str, confirm_password: str) -> bool:
+    def change_password(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
             return False
@@ -98,7 +98,7 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management (Vipin's Logic - Kept from HEAD) ----------------
-    def enrolSubject(self, subject_name: str) -> bool:
+    def enrol_subject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -117,7 +117,7 @@ class StudentSubsystem:
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
 
-    def removeSubject(self, subject_id: str) -> bool:
+    def remove_subject(self, subject_id: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -137,7 +137,7 @@ class StudentSubsystem:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    def viewEnrolments(self) -> List[Dict]:
+    def view_enrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")
             return []
