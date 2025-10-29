@@ -1,47 +1,48 @@
-# controllers/data_manager.py  (pickle variant)
+# controllers/data_manager.py  — simple pickle version
 import os
 import pickle
-from typing import List, Any
 
 class DataManager:
-    def __init__(self, file_path: str = "data/students.data"):
+    def __init__(self, file_path="data/students.data"):
         self.file_path = file_path
-        self.handleEmptyData()
+        self._make_file_ready()
 
-    def handleEmptyData(self) -> None:
-        """Create folder/file and ensure the file contains a pickled empty list."""
+    def _make_file_ready(self):
+        """Make sure the folder exists and the file is a valid pickle list."""
         folder = os.path.dirname(self.file_path) or "."
         os.makedirs(folder, exist_ok=True)
-        # Create file or fix zero-length/corrupted file by seeding with []
-        if (not os.path.exists(self.file_path)) or os.path.getsize(self.file_path) == 0:
+        if not os.path.exists(self.file_path) or os.path.getsize(self.file_path) == 0:
+            # start the file with an empty list so pickle can read it later
             with open(self.file_path, "wb") as f:
                 pickle.dump([], f)
 
-    def loadData(self) -> List[Any]:
-        """Load list of students (list) from pickle. Safe on corruption."""
+    def loadData(self):
+        """Return the list of students (or [] if something goes wrong)."""
         try:
             with open(self.file_path, "rb") as f:
                 data = pickle.load(f)
             return data if isinstance(data, list) else []
         except Exception:
-            # On error, repair file and return empty list
+            # if file is corrupted, reset to []
             with open(self.file_path, "wb") as f:
                 pickle.dump([], f)
             return []
 
-    def saveData(self, studentList: List[Any]) -> None:
-        """Overwrite the file with the full student list."""
+    def saveData(self, student_list):
+        """Save (overwrite) the full list. Keep it as a list of dicts for now."""
+        if not isinstance(student_list, list):
+            raise TypeError("saveData expects a list (e.g., list of dicts).")
         with open(self.file_path, "wb") as f:
-            pickle.dump(studentList, f)
+            pickle.dump(student_list, f)
 
-    def clearData(self) -> None:
-        """Reset file to an empty list."""
+    def clearData(self):
+        """Clear all students (set the file to [])."""
         with open(self.file_path, "wb") as f:
             pickle.dump([], f)
 
-    def backupData(self, suffix: str = ".bak") -> str:
-        """Copy the pickle file next to it and return the backup path."""
-        backup_path = f"{self.file_path}{suffix}"
+    def backupData(self, suffix=".bak"):
+        """Create a simple backup next to the main file."""
+        backup_path = self.file_path + suffix
         if os.path.exists(self.file_path):
             with open(self.file_path, "rb") as src, open(backup_path, "wb") as dst:
                 dst.write(src.read())
