@@ -41,9 +41,9 @@ class GUIUniApp(tk.Tk):
 if __name__ == "__main__":
     from controllers.student_subsystem import StudentSubsystem
 
-    # StudentSubsystem 객체 생성
+    # Initialise StudentSubsystem
     subsystem = StudentSubsystem()
 
-    # GUI 실행
+    # Run GUI
     app = GUIUniApp(subsystem)
-    app.mainloop()  # mainloop() 호출
+    app.mainloop()  # call mainloop()
