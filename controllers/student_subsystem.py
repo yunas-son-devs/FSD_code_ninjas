@@ -1,9 +1,9 @@
 # controllers/student_subsystem.py
 
 from typing import List, Dict 
-from models.subject import Subject
+from models.subject import Subject 
 # --- Dependencies from teammates ---
-import utils.validator as validator       # Yuna's validation tools (Used as 'validator')
+import utils.validator as validator       # Yuna's validation tools 
 from controllers.data_manager import DataManager  # Ved's data persistence tools
 import models.student as student_module # Vipin's Student model module import
 
@@ -19,13 +19,14 @@ class StudentSubsystem:
     # ---------------- Registration/Login/Logout (YOUR GUI-READY LOGIC) ----------------
     
     def register(self, name: str, email: str, password: str) -> Dict:
-        # 1. Input Validation 
-        # 🚨 FIX: validateEmail -> validate_email
-        if not validator.validate_email(email):
+        # 1. Input Validation - USING TEAM'S CURRENT CAMEL CASE NAMES FOR COMPATIBILITY
+        
+        # Must use Camel Case: validateEmail
+        if not validator.validateEmail(email):
             return {"success": False, "message": "Registration failed: Invalid email format."}
 
-        # 🚨 FIX: validatePassword -> validate_password
-        if not validator.validate_password(password):
+        # Must use Camel Case: validatePassword
+        if not validator.validatePassword(password):
             return {"success": False, "message": "Registration failed: Password does not meet security requirements."}
 
         # 2. Existence Check
@@ -34,8 +35,8 @@ class StudentSubsystem:
                 return {"success": False, "message": "Registration failed: This email is already registered."}
 
         # 3. Create New Student Object
-        # 🚨 FIX: generateStudentID -> generate_student_id
-        student_id = validator.generate_student_id()
+        # Must use Camel Case: generateStudentID
+        student_id = validator.generateStudentID()
 
         try:
             new_student = student_module.Student(student_id, name, email, password)
@@ -52,6 +53,7 @@ class StudentSubsystem:
             return {"success": False, "message": "Registration failed: Could not save data to file."}
 
     def login(self, email: str, password: str) -> Dict:
+        target_student = None
         for student_obj in self.all_students:
             if student_obj.email.lower() == email.lower():
                 target_student = student_obj
@@ -75,7 +77,7 @@ class StudentSubsystem:
             return {"success": False, "message": "Error: No user is currently logged in."}
 
     # ---------------- Password Management ----------------
-    def change_password(self, new_password: str, confirm_password: str) -> bool:
+    def changePassword(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
             return False
@@ -84,8 +86,8 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        # 🚨 FIX: validatePassword -> validate_password
-        valid, msg = validator.validate_password(new_password)
+        # Must use Camel Case: validatePassword
+        valid, msg = validator.validatePassword(new_password)
         if not valid:
             print(f"Password change failed: {msg}")
             return False
@@ -96,7 +98,7 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management ----------------
-    def enrol_subject(self, subject_name: str) -> bool:
+    def enrolSubject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -105,12 +107,10 @@ class StudentSubsystem:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
 
-        # 🚨 FIX: generateSubjectID -> generate_subject_id (Assumed fix)
-        # 🚨 FIX: autoAssignMark -> auto_assign_mark (Assumed fix)
-        # 🚨 FIX: calculateGrade -> calculate_grade (Assumed fix)
-        sub = Subject(id=Subject.generate_subject_id(), name=subject_name) 
-        sub.auto_assign_mark()
-        sub.calculate_grade()
+        # Assuming Subject methods are also in Camel Case for consistency:
+        sub = Subject(id=Subject.generateStudentID(), name=subject_name) 
+        sub.autoAssignMark()
+        sub.calculateGrade()
         self.current_student.subjects.append(sub)
         self.current_student.updateAverageMark()
         self.current_student.determinePassFailStatus()
@@ -138,7 +138,7 @@ class StudentSubsystem:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    def view_enrolments(self) -> List[Dict]:
+    def viewEnrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")
             return []
