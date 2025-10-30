@@ -19,14 +19,12 @@ class StudentSubsystem:
     # ---------------- Registration/Login/Logout (YOUR GUI-READY LOGIC) ----------------
     
     def register(self, name: str, email: str, password: str) -> Dict:
-        # 1. Input Validation - USING TEAM'S CURRENT CAMEL CASE NAMES FOR COMPATIBILITY
-        
-        # Must use Camel Case: validateEmail
-        if not validator.validateEmail(email):
+        # Must use Snake Case: validate_email
+        if not validator.validate_email(email):
             return {"success": False, "message": "Registration failed: Invalid email format."}
 
-        # Must use Camel Case: validatePassword
-        if not validator.validatePassword(password):
+        # Must use Snake Case: validate_password
+        if not validator.validate_password(password):
             return {"success": False, "message": "Registration failed: Password does not meet security requirements."}
 
         # 2. Existence Check
@@ -35,8 +33,8 @@ class StudentSubsystem:
                 return {"success": False, "message": "Registration failed: This email is already registered."}
 
         # 3. Create New Student Object
-        # Must use Camel Case: generateStudentID
-        student_id = validator.generateStudentID()
+        # Must use Snake Case: generate_student_id
+        student_id = validator.generate_student_id()
 
         try:
             new_student = student_module.Student(student_id, name, email, password)
@@ -77,7 +75,8 @@ class StudentSubsystem:
             return {"success": False, "message": "Error: No user is currently logged in."}
 
     # ---------------- Password Management ----------------
-    def changePassword(self, new_password: str, confirm_password: str) -> bool:
+    # Renamed: changePassword -> change_password
+    def change_password(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
             return False
@@ -86,8 +85,8 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        # Must use Camel Case: validatePassword
-        valid, msg = validator.validatePassword(new_password)
+        # Must use Snake Case: validate_password
+        valid, msg = validator.validate_password(new_password)
         if not valid:
             print(f"Password change failed: {msg}")
             return False
@@ -98,7 +97,8 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management ----------------
-    def enrolSubject(self, subject_name: str) -> bool:
+    # Renamed: enrolSubject -> enrol_subject
+    def enrol_subject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -107,17 +107,18 @@ class StudentSubsystem:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
 
-        # Assuming Subject methods are also in Camel Case for consistency:
-        sub = Subject(id=Subject.generateStudentID(), name=subject_name) 
-        sub.autoAssignMark()
-        sub.calculateGrade()
+        # Assuming all Subject methods are now snake_case for consistency:
+        sub = Subject(id=Subject.generate_student_id(), name=subject_name) 
+        sub.auto_assign_mark()
+        sub.calculate_grade()
         self.current_student.subjects.append(sub)
-        self.current_student.updateAverageMark()
-        self.current_student.determinePassFailStatus()
+        self.current_student.update_average_mark()
+        self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
 
+    # Renamed: removeSubject -> remove_subject
     def remove_subject(self, subject_id: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
@@ -130,15 +131,16 @@ class StudentSubsystem:
         removed = len(self.current_student.subjects) < before
 
         if removed:
-            self.current_student.updateAverageMark()
-            self.current_student.determinePassFailStatus()
+            self.current_student.update_average_mark()
+            self.current_student.determine_pass_fail_status()
             self.data_manager.saveData(self.all_students)
             print(f"Removed subject {subject_id} successfully.")
         else:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    def viewEnrolments(self) -> List[Dict]:
+    # Renamed: viewEnrolments -> view_enrolments
+    def view_enrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")
             return []
