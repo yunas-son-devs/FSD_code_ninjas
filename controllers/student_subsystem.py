@@ -1,3 +1,4 @@
+from controllers.data_manager import DataManager
 # controllers/student_subsystem.py
 from typing import List, Dict
 from models.student import Student
@@ -21,6 +22,8 @@ class StudentSubsystem:
 
         self.student.update_average_mark()
         self.student.determine_pass_fail_status()
+        DataManager.saveData([self.student])
+
         return sub
 
     def removeSubject(self, subject_id: str) -> bool:
@@ -30,6 +33,8 @@ class StudentSubsystem:
 
         self.student.update_average_mark()
         self.student.determine_pass_fail_status()
+        DataManager.saveData([self.student])
+
         return removed
 
     def viewEnrolments(self) -> List[Dict]:

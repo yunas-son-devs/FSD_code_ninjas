@@ -1,48 +1,52 @@
-# controllers/data_manager.py  (pickle variant)
-import os
-import pickle
-from typing import List, Any
+# controllers/data_manager.py
+import json
+from models.student import Student
+from models.subject import Subject
+
+DATA_FILE = "data/students.data"
 
 class DataManager:
-    def __init__(self, file_path: str = "data/students.data"):
-        self.file_path = file_path
-        self.handleEmptyData()
+    """Save and load student data in JSON."""
 
-    def handleEmptyData(self) -> None:
-        """Create folder/file and ensure the file contains a pickled empty list."""
-        folder = os.path.dirname(self.file_path) or "."
-        os.makedirs(folder, exist_ok=True)
-        # Create file or fix zero-length/corrupted file by seeding with []
-        if (not os.path.exists(self.file_path)) or os.path.getsize(self.file_path) == 0:
-            with open(self.file_path, "wb") as f:
-                pickle.dump([], f)
+    @staticmethod
+    def saveData(students: list[Student]) -> None:
+        blob = []
+        for st in students:
+            blob.append({
+                "id": st.id,
+                "name": st.name,
+                "email": st.email,
+                "password": st.password,
+                "average_mark": st.average_mark,
+                "pass_fail": st.pass_fail,
+                "subjects": [
+                    {"id": s.id, "name": s.name, "mark": s.mark, "grade": s.grade}
+                    for s in st.subjects
+                ]
+            })
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(blob, f, indent=2)
 
-    def loadData(self) -> List[Any]:
-        """Load list of students (list) from pickle. Safe on corruption."""
+    @staticmethod
+    def loadData() -> list[Student]:
         try:
-            with open(self.file_path, "rb") as f:
-                data = pickle.load(f)
-            return data if isinstance(data, list) else []
-        except Exception:
-            # On error, repair file and return empty list
-            with open(self.file_path, "wb") as f:
-                pickle.dump([], f)
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                blob = json.load(f)
+        except FileNotFoundError:
             return []
 
-    def saveData(self, studentList: List[Any]) -> None:
-        """Overwrite the file with the full student list."""
-        with open(self.file_path, "wb") as f:
-            pickle.dump(studentList, f)
-
-    def clearData(self) -> None:
-        """Reset file to an empty list."""
-        with open(self.file_path, "wb") as f:
-            pickle.dump([], f)
-
-    def backupData(self, suffix: str = ".bak") -> str:
-        """Copy the pickle file next to it and return the backup path."""
-        backup_path = f"{self.file_path}{suffix}"
-        if os.path.exists(self.file_path):
-            with open(self.file_path, "rb") as src, open(backup_path, "wb") as dst:
-                dst.write(src.read())
-        return backup_path
+        students: list[Student] = []
+        for st in blob:
+            subjects = [Subject(**s) for s in st.get("subjects", [])]
+            students.append(
+                Student(
+                    id=st["id"],
+                    name=st["name"],
+                    email=st["email"],
+                    password=st["password"],
+                    subjects=subjects,
+                    average_mark=st.get("average_mark", 0.0),
+                    pass_fail=st.get("pass_fail", "TBD"),
+                )
+            )
+        return students
