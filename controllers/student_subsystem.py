@@ -1,86 +1,82 @@
-from typing import List, Dict
-from models.student import Student
-from models.subject import Subject
-from utils.validator import Validator
-from controllers.data_manager import DataManager
+# controllers/student_subsystem.py
+
+from typing import List, Dict 
+from models.subject import Subject 
+# --- Dependencies from teammates ---
+import utils.validator as validator       # Yuna's validation tools 
+from controllers.data_manager import DataManager  # Ved's data persistence tools
+import models.student as student_module # Vipin's Student model module import
+
 
 class StudentSubsystem:
-    """
-    Handles student-facing operations:
-    - Registration/Login/Logout
-    - Password change
-    - Subject enrolment/removal/view
-    All data is persisted via DataManager.
-    """
-
     MAX_SUBJECTS = 4
 
     def __init__(self):
-        self.data_manager = DataManager()          # Ved's persistence
-        self.all_students: List[Student] = self.data_manager.loadData()
-        self.current_student: Student | None = None
+        self.data_manager = DataManager()
+        self.all_students: List[student_module.Student] = self.data_manager.loadData()
+        self.current_student: student_module.Student | None = None
 
-    # ---------------- Registration/Login/Logout ----------------
-    def register(self, name: str, email: str, password: str) -> bool:
-        # Email validation
-        if not Validator.validateEmail(email):
-            print("Registration failed: Invalid email format.")
-            return False
+    # ---------------- Registration/Login/Logout (YOUR GUI-READY LOGIC) ----------------
+    
+    def register(self, name: str, email: str, password: str) -> Dict:
+        # Must use Snake Case: validate_email
+        if not validator.validate_email(email):
+            return {"success": False, "message": "Registration failed: Invalid email format."}
 
-        # Password validation
-        valid, msg = Validator.validatePassword(password)
-        if not valid:
-            print(f"Registration failed: {msg}")
-            return False
+        # Must use Snake Case: validate_password
+        if not validator.validate_password(password):
+            return {"success": False, "message": "Registration failed: Password does not meet security requirements."}
 
-        # Check for duplicate email
+        # 2. Existence Check
         for student_obj in self.all_students:
             if student_obj.email.lower() == email.lower():
-                print("Registration failed: Email already registered.")
-                return False
+                return {"success": False, "message": "Registration failed: This email is already registered."}
 
-        # Generate unique student ID
-        student_id = Validator.generateStudentID()
+        # 3. Create New Student Object
+        # Must use Snake Case: generate_student_id
+        student_id = validator.generate_student_id()
+
         try:
-            new_student = Student(student_id, name, email, password)
+            new_student = student_module.Student(student_id, name, email, password)
         except Exception as e:
-            print(f"Error creating student object: {e}")
-            return False
+            return {"success": False, "message": f"Error creating student object: {e}"}
+        
+        # 4. Data Persistence
+        self.all_students.append(new_student) 
 
-        self.all_students.append(new_student)
-        try:
-            self.data_manager.saveData(self.all_students)
-            print(f"Registration successful! Student ID: {student_id}")
-            return True
-        except Exception:
-            self.all_students.pop()
-            print("Registration failed: Could not save data.")
-            return False
+        if self.data_manager.saveData(self.all_students):
+            return {"success": True, "message": f"Registration successful! Student ID: {student_id}"}
+        else:
+            self.all_students.pop() 
+            return {"success": False, "message": "Registration failed: Could not save data to file."}
 
-    def login(self, email: str, password: str) -> bool:
+    def login(self, email: str, password: str) -> Dict:
+        target_student = None
         for student_obj in self.all_students:
             if student_obj.email.lower() == email.lower():
-                if student_obj.password == password:
-                    self.current_student = student_obj
-                    print(f"Login successful! Welcome, {student_obj.name}.")
-                    return True
-                else:
-                    print("Login failed: Incorrect password.")
-                    return False
-        print("Login failed: User not found.")
-        return False
+                target_student = student_obj
+                break
+        
+        if target_student is None:
+            return {"success": False, "message": "Login failed: User not found."}
 
-    def logout(self) -> bool:
-        if self.current_student:
+        if target_student.password == password:
+            self.current_student = target_student  
+            return {"success": True, "student": target_student, "message": f"Login successful! Welcome, {target_student.name}."}
+        else:
+            return {"success": False, "message": "Login failed: Incorrect password."}
+
+    def logout(self) -> Dict:
+        if self.current_student is not None:
             name = self.current_student.name
-            self.current_student = None
-            print(f"Logout successful. Goodbye, {name}.")
-            return True
-        print("Logout failed: No user is currently logged in.")
-        return False
+            self.current_student = None 
+            return {"success": True, "message": f"Logout successful. Goodbye, {name}."}
+        else:
+            return {"success": False, "message": "Error: No user is currently logged in."}
 
     # ---------------- Password Management ----------------
-    def changePassword(self, new_password: str, confirm_password: str) -> bool:
+    # Renamed: changePassword -> change_password
+    def change_password(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
             return False
@@ -89,7 +85,8 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        valid, msg = Validator.validatePassword(new_password)
+        # Must use Snake Case: validate_password
+        valid, msg = validator.validate_password(new_password)
         if not valid:
             print(f"Password change failed: {msg}")
             return False
@@ -100,7 +97,8 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management ----------------
-    def enrolSubject(self, subject_name: str) -> bool:
+    # Renamed: enrolSubject -> enrol_subject
+    def enrol_subject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -109,17 +107,19 @@ class StudentSubsystem:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
 
-        sub = Subject(id=Subject.generateSubjectID(), name=subject_name)
-        sub.autoAssignMark()
-        sub.calculateGrade()
+        # Assuming all Subject methods are now snake_case for consistency:
+        sub = Subject(id=Subject.generate_student_id(), name=subject_name) 
+        sub.auto_assign_mark()
+        sub.calculate_grade()
         self.current_student.subjects.append(sub)
-        self.current_student.updateAverageMark()
-        self.current_student.determinePassFailStatus()
+        self.current_student.update_average_mark()
+        self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
 
-    def removeSubject(self, subject_id: str) -> bool:
+    # Renamed: removeSubject -> remove_subject
+    def remove_subject(self, subject_id: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -131,15 +131,16 @@ class StudentSubsystem:
         removed = len(self.current_student.subjects) < before
 
         if removed:
-            self.current_student.updateAverageMark()
-            self.current_student.determinePassFailStatus()
+            self.current_student.update_average_mark()
+            self.current_student.determine_pass_fail_status()
             self.data_manager.saveData(self.all_students)
             print(f"Removed subject {subject_id} successfully.")
         else:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    def viewEnrolments(self) -> List[Dict]:
+    # Renamed: viewEnrolments -> view_enrolments
+    def view_enrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")
             return []
