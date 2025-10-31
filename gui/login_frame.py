@@ -10,7 +10,7 @@ class LoginFrame(tk.Frame):
     def __init__(self, parent, app):
         super().__init__(parent)
         self.app = app
-        self.subsystem = StudentSubsystem()
+        self.subsystem = app.student_subsystem
         self.place(relwidth=1, relheight=1)
 
         tk.Label(self, text="Email").pack()
