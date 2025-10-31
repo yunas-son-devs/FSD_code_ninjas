@@ -37,45 +37,49 @@ class System:
             else:
                 print("Invalid choice. Please enter A, S, or X.")
 
-    # 2. Student Sub-Menu Method: student_system_menu() (Suzy's main focus)
+    # 2. Student System Menu
     def student_system_menu(self):
         while True:
             print("\n--- Student System Menu ---")
-            print("L: Login")      # <-- Week 2 Logic
-            print("R: Register")   # <-- Week 2 Logic
+            print("L: Login")
+            print("R: Register")
             print("X: Return to Main Menu")
             print("---------------------------")
 
             choice = input("Enter your choice: ").strip().upper()
 
             if choice == 'L':
-                print("Login selected. (Your Week 2 Task: StudentSubsystem.login())")
-                # self.student_subsystem.login_prompt()
+                # -------------------- Login --------------------
+                print("\n=== Student Login ===")
+                email = input("Enter your email: ").strip()
+                password = input("Enter your password: ").strip()
+                self.student_subsystem.login(email, password)
 
             elif choice == 'R':
-                print("Register selected. (Your Week 2 Task: StudentSubsystem.register())")
-                # self.student_subsystem.register_prompt()
+                # -------------------- Register --------------------
+                print("\n=== Student Registration ===")
+                name = input("Enter your name: ").strip()
+                email = input("Enter your email: ").strip()
+                password = input("Enter your password: ").strip()
+                self.student_subsystem.register(name, email, password)
 
             elif choice == 'X':
-                break  # Returns to the main startCLI() loop
-
+                break
             else:
                 print("Invalid choice. Please enter L, R, or X.")
 
-    # 3. Admin Placeholder Method: admin_system_menu() (Fulfills navigation requirement)
+    # 3. Admin System Menu (placeholder)
     def admin_system_menu(self):
         while True:
             print("\n--- Admin System Menu (Ved's Task Placeholder) ---")
             print("X: Return to Main Menu")
             print("--------------------------------------------------")
-            
             choice = input("Enter your choice: ").strip().upper()
-            
+
             if choice == 'X':
-                break  # Returns to the main startCLI() loop
+                break
             else:
                 print("Invalid choice. Please enter X.")
-
 
 # Application entry point (starts the CLI when main.py is run directly)
 if __name__ == "__main__":
