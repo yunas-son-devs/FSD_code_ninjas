@@ -14,6 +14,9 @@ class StudentSubsystem:
     def enrolSubject(self, subject_name: str) -> Subject:
         if self.student.hasMaxSubjects():
             raise ValueError("Cannot enrol: student already has 4 subjects.")
+        if any(s.name.lower() == subject_name.lower() for s in self.student.subjects):
+            raise ValueError("Subject already enrolled.")
+        
 
         sub = Subject(id=Subject.generateSubjectID(), name=subject_name)
         sub.assign_mark()
