@@ -110,11 +110,11 @@ class StudentSubsystem:
             return False
 
         sub = Subject(id=Subject.generate_subject_id(), name=subject_name)
-        sub.autoAssignMark()
-        sub.calculateGrade()
+        sub.assign_mark()
+        sub.calculate_grade()
         self.current_student.subjects.append(sub)
-        self.current_student.updateAverageMark()
-        self.current_student.determinePassFailStatus()
+        self.current_student.update_average_mark()
+        self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
@@ -131,8 +131,8 @@ class StudentSubsystem:
         removed = len(self.current_student.subjects) < before
 
         if removed:
-            self.current_student.updateAverageMark()
-            self.current_student.determinePassFailStatus()
+            self.current_student.update_average_mark()
+            self.current_student.determine_pass_fail_status()
             self.data_manager.saveData(self.all_students)
             print(f"Removed subject {subject_id} successfully.")
         else:
