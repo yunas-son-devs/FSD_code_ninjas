@@ -1,83 +1,50 @@
 # cli/main.py
-# cli/main.py 的文件顶部
 from controllers.student_subsystem import StudentSubsystem
+from .login_cli import student_login, student_register
+from .enrol_cli import subject_menu
+#from .admin_cli import admin_menu
 
-# ...  class System  ...
 class System:
     def __init__(self):
-        
-        self.student_subsystem = StudentSubsystem() 
-        pass
+        self.subsystem = StudentSubsystem()
 
-    # 1. Main Menu Method: startCLI() - University Menu
-    def startCLI(self):
+    def start_cli(self):
         while True:
-            print("\n==================================")
-            print("  Welcome to University App CLI")
-            print("==================================")
-            print("A: Admin System")    # <--- Navigate to Admin Menu
-            print("S: Student System")  # <--- Navigate to Student Menu
-            print("X: Exit Application")
-            print("----------------------------------")
-
-            # .strip().upper() ensures clean input regardless of case or whitespace
-            choice = input("Enter your choice: ").strip().upper()
+            print("\n=== University CLI ===")
+            print("A: Admin System")
+            print("S: Student System")
+            print("X: Exit")
+            choice = input("Enter choice: ").strip().upper()
 
             if choice == 'A':
-                # Required navigation for Admin Menu (Ved's task)
-                self.admin_system_menu()
-
+                print("Please implement admin_menu Ved")
+                # admin_menu(self.subsystem)
             elif choice == 'S':
-                # Call the student sub-menu method
                 self.student_system_menu()
-
             elif choice == 'X':
-                print("Exiting University Application. Goodbye!")
+                print("Goodbye!")
                 break
             else:
-                print("Invalid choice. Please enter A, S, or X.")
+                print("Invalid choice.")
 
-    # 2. Student Sub-Menu Method: student_system_menu() (Suzy's main focus)
     def student_system_menu(self):
         while True:
-            print("\n--- Student System Menu ---")
-            print("L: Login")      # <-- Week 2 Logic
-            print("R: Register")   # <-- Week 2 Logic
-            print("X: Return to Main Menu")
-            print("---------------------------")
-
-            choice = input("Enter your choice: ").strip().upper()
+            print("\n--- Student Menu ---")
+            print("L: Login")
+            print("R: Register")
+            print("X: Back to Main Menu")
+            choice = input("Enter choice: ").strip().upper()
 
             if choice == 'L':
-                print("Login selected. (Your Week 2 Task: StudentSubsystem.login())")
-                # self.student_subsystem.login_prompt()
-
+                if student_login(self.subsystem):
+                    subject_menu(self.subsystem)
             elif choice == 'R':
-                print("Register selected. (Your Week 2 Task: StudentSubsystem.register())")
-                # self.student_subsystem.register_prompt()
-
+                student_register(self.subsystem)
             elif choice == 'X':
-                break  # Returns to the main startCLI() loop
-
+                break
             else:
-                print("Invalid choice. Please enter L, R, or X.")
+                print("Invalid choice.")
 
-    # 3. Admin Placeholder Method: admin_system_menu() (Fulfills navigation requirement)
-    def admin_system_menu(self):
-        while True:
-            print("\n--- Admin System Menu (Ved's Task Placeholder) ---")
-            print("X: Return to Main Menu")
-            print("--------------------------------------------------")
-            
-            choice = input("Enter your choice: ").strip().upper()
-            
-            if choice == 'X':
-                break  # Returns to the main startCLI() loop
-            else:
-                print("Invalid choice. Please enter X.")
-
-
-# Application entry point (starts the CLI when main.py is run directly)
 if __name__ == "__main__":
     app = System()
-    app.startCLI()
+    app.start_cli()
