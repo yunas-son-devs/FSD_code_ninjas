@@ -27,6 +27,7 @@ class System:
             else:
                 print("Invalid choice.")
 
+<<<<<<< HEAD
     def student_system_menu(self):
         while True:
             print("\n--- Student Menu ---")
@@ -40,11 +41,56 @@ class System:
                     subject_menu(self.subsystem)
             elif choice == 'R':
                 student_register(self.subsystem)
+=======
+    # 2. Student System Menu
+    def student_system_menu(self):
+        while True:
+            print("\n--- Student System Menu ---")
+            print("L: Login")
+            print("R: Register")
+            print("X: Return to Main Menu")
+            print("---------------------------")
+
+            choice = input("Enter your choice: ").strip().upper()
+
+            if choice == 'L':
+                # -------------------- Login --------------------
+                print("\n=== Student Login ===")
+                email = input("Enter your email: ").strip()
+                password = input("Enter your password: ").strip()
+                self.student_subsystem.login(email, password)
+
+            elif choice == 'R':
+                # -------------------- Register --------------------
+                print("\n=== Student Registration ===")
+                name = input("Enter your name: ").strip()
+                email = input("Enter your email: ").strip()
+                password = input("Enter your password: ").strip()
+                self.student_subsystem.register(name, email, password)
+
+>>>>>>> feature/gui
             elif choice == 'X':
                 break
             else:
                 print("Invalid choice.")
 
+<<<<<<< HEAD
+=======
+    # 3. Admin System Menu (placeholder)
+    def admin_system_menu(self):
+        while True:
+            print("\n--- Admin System Menu (Ved's Task Placeholder) ---")
+            print("X: Return to Main Menu")
+            print("--------------------------------------------------")
+            choice = input("Enter your choice: ").strip().upper()
+
+            if choice == 'X':
+                break
+            else:
+                print("Invalid choice. Please enter X.")
+
+# Application entry point (starts the CLI when main.py is run directly)
+>>>>>>> feature/gui
 if __name__ == "__main__":
     app = System()
     app.start_cli()
