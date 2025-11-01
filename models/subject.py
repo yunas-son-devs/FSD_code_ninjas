@@ -10,7 +10,7 @@ class Subject:
     grade: str = field(default="Not graded")
 
     @staticmethod
-    def generateSubjectID() -> str:
+    def generate_subject_id() -> str:
         """Create a random 3-digit Subject ID"""
         return f"{random.randint(1, 999):03d}"
 
