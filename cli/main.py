@@ -2,7 +2,7 @@
 from controllers.student_subsystem import StudentSubsystem
 from .login_cli import student_login, student_register
 from .enrol_cli import subject_menu
-#from .admin_cli import admin_menu
+from .admin_cli import admin_menu
 
 class System:
     def __init__(self):
@@ -17,8 +17,8 @@ class System:
             choice = input("Enter choice: ").strip().upper()
 
             if choice == 'A':
-                print("Please implement admin_menu Ved")
-                # admin_menu(self.subsystem)
+                admin_menu()
+
             elif choice == 'S':
                 self.student_system_menu()
             elif choice == 'X':
