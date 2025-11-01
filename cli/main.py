@@ -1,12 +1,15 @@
 # cli/main.py
 # cli/main.py 的文件顶部
 from controllers.student_subsystem import StudentSubsystem
+from colorama import init, Fore, Style
+init(autoreset=True)
 
 # ...  class System  ...
 class System:
     def __init__(self):
         
-        self.student_subsystem = StudentSubsystem() 
+        self.student_subsystem = StudentSubsystem(current_student=None)
+
         pass
 
     # 1. Main Menu Method: startCLI() - University Menu
@@ -32,10 +35,12 @@ class System:
                 self.student_system_menu()
 
             elif choice == 'X':
-                print("Exiting University Application. Goodbye!")
+                print(Fore.GREEN + "Exiting University Application. Goodbye!")
+
                 break
             else:
-                print("Invalid choice. Please enter A, S, or X.")
+                print(Fore.RED + "Invalid choice. Please enter A, S, or X.")
+
 
     # 2. Student Sub-Menu Method: student_system_menu() (Suzy's main focus)
     def student_system_menu(self):
@@ -60,7 +65,8 @@ class System:
                 break  # Returns to the main startCLI() loop
 
             else:
-                print("Invalid choice. Please enter L, R, or X.")
+                print(Fore.RED + "Invalid choice. Please enter L, R, or X.")
+
 
     # 3. Admin Placeholder Method: admin_system_menu() (Fulfills navigation requirement)
     def admin_system_menu(self):
@@ -74,7 +80,7 @@ class System:
             if choice == 'X':
                 break  # Returns to the main startCLI() loop
             else:
-                print("Invalid choice. Please enter X.")
+                print(Fore.RED + "Invalid choice. Please enter X.")
 
 
 # Application entry point (starts the CLI when main.py is run directly)
