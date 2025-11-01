@@ -108,14 +108,8 @@ class StudentSubsystem:
         if len(self.current_student.subjects) >= self.MAX_SUBJECTS:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
-        
-        # Prevent duplicate enrolment
-        for s in self.current_student.subjects:
-            if s.name.lower() == subject_name.lower():
-                print(f"Cannot enrol: You are already enrolled in '{subject_name}'.")
-                return False
 
-        sub = Subject(id=Subject.generateSubjectID(), name=subject_name)
+        sub = Subject(id=Subject.generate_subject_id(), name=subject_name)
         sub.assign_mark()
         sub.calculate_grade()
         self.current_student.subjects.append(sub)
