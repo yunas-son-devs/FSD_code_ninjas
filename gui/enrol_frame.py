@@ -3,12 +3,13 @@ import tkinter as tk
 from tkinter import messagebox as mb
 from tkinter.simpledialog import askstring
 from controllers.student_subsystem import StudentSubsystem
-from models.subject import Subject # Subject 클래스가 필요할 수 있음
+from models.subject import Subject
+from .exception_frame import ExceptionWindow
 
 class EnrolmentFrame(tk.Frame):
     """
-    Subject Enrolment Window GUI
-    - Shows enrolled subjects, student summary, and core functions.
+    GUI for Subject Enrolment
+    - Displays enrolled subjects, student summary, and core functions.
     """
     def __init__(self, parent, app):
         super().__init__(parent)
@@ -16,23 +17,27 @@ class EnrolmentFrame(tk.Frame):
         self.subsystem: StudentSubsystem = app.student_subsystem 
         self.place(relwidth=1, relheight=1)
         
-        # UI 구성 요소를 저장할 변수
+        # Variables to store UI components
         self.summary_label = None
         self.subject_listbox = None 
         
         self.create_widgets()
         
     def create_widgets(self):
-        # 중앙 컨테이너 (정렬을 위해)
+        # Main container (for layout)
         main_container = tk.Frame(self)
         main_container.pack(pady=20, padx=20, fill="both", expand=True)
 
-        # 1. 학생 요약 정보 섹션
-        self.summary_label = tk.Label(main_container, text="Student Summary", 
-                                      font=("Arial", 12, "bold"), justify=tk.LEFT)
+        # 1. Student summary section
+        self.summary_label = tk.Label(
+            main_container,
+            text="Student Summary",
+            font=("Arial", 12, "bold"),
+            justify=tk.LEFT
+        )
         self.summary_label.pack(fill="x", pady=(0, 10))
 
-        # 2. 과목 목록 섹션
+        # 2. Subjects list section
         tk.Label(main_container, text="Enrolled Subjects (Max 4):").pack(pady=(10, 5), anchor="w")
         
         list_frame = tk.Frame(main_container)
@@ -45,7 +50,7 @@ class EnrolmentFrame(tk.Frame):
         scrollbar.pack(side="right", fill="y")
         self.subject_listbox.config(yscrollcommand=scrollbar.set)
 
-        # 3. 버튼 섹션
+        # 3. Buttons section
         button_frame = tk.Frame(main_container)
         button_frame.pack(fill="x", pady=10)
         
@@ -68,14 +73,14 @@ class EnrolmentFrame(tk.Frame):
         if not student:
             return
 
-        # 1. 요약 정보 업데이트
+        # 1. Update summary info
         summary = (
             f"ID: {student.id} | Name: {student.name} | Email: {student.email}\n"
             f"Avg Mark: {student.average_mark:.2f} | Status: {student.pass_fail}"
         )
         self.summary_label.config(text=summary)
 
-        # 2. 과목 목록 업데이트
+        # 2. Update subject list
         self.subject_listbox.delete(0, tk.END)
         self.subject_listbox.insert(tk.END, "ID    | Name                                | Mark | Grade")
         self.subject_listbox.insert(tk.END, "------|-------------------------------------|------|------")
@@ -90,26 +95,24 @@ class EnrolmentFrame(tk.Frame):
     # ------------------ Action Methods ------------------
     
     def enrol_subject(self):
-        """Automatically generate a subject name and enrol."""
+        """Automatically generate a subject name and enrol the student."""
         student = self.subsystem.current_student
 
-        # --- 디버그용 출력 ---
+        # --- Debug output ---
         print("DEBUG: current_student type:", type(student))
         print("DEBUG: current_student dir:", dir(student))
         # ----------------------
-        
+
         if student.has_max_subjects():
             mb.showerror("Enrolment Error", f"Maximum of {student.MAX_SUBJECTS} subjects reached.")
             return
 
-        # Subject name generation logic (using the pattern from CLI)
+        # Generate a subject name
         subject_name = f"Subject {len(student.subjects) + 1}"
 
         if self.subsystem.enrol_subject(subject_name):
             mb.showinfo("Success", f"Successfully enrolled in: '{subject_name}'")
         else:
-            # Note: student_subsystem prints specific errors to console, 
-            # but for GUI we provide a catch-all.
             mb.showerror("Error", "Enrolment failed. Check console for details.")
             
         self.refresh_data()
@@ -122,7 +125,7 @@ class EnrolmentFrame(tk.Frame):
             mb.showerror("Error", "Please select a subject (not a header) to remove.")
             return
         
-        # 리스트박스의 라인에서 Subject ID 추출 (첫 6자리)
+        # Extract Subject ID from the listbox line
         selected_line = self.subject_listbox.get(selection[0])
         subject_id = selected_line.split('|')[0].strip()
         
@@ -145,11 +148,10 @@ class EnrolmentFrame(tk.Frame):
         if not confirm_pw:
             return
 
-        # StudentSubsystem.change_password가 모든 유효성 검사 및 저장을 처리
+        # StudentSubsystem.change_password handles validation and saving
         if self.subsystem.change_password(new_pw, confirm_pw):
             mb.showinfo("Success", "Password changed successfully.")
         else:
-            # StudentSubsystem에서 출력되는 오류 메시지를 GUI로 대체할 수도 있습니다.
             mb.showerror("Error", "Password change failed. Check validation rules or mismatch.")
 
 
