@@ -108,13 +108,19 @@ class StudentSubsystem:
         if len(self.current_student.subjects) >= self.MAX_SUBJECTS:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
+        
+        # Prevent duplicate enrolment
+        for s in self.current_student.subjects:
+            if s.name.lower() == subject_name.lower():
+                print(f"Cannot enrol: You are already enrolled in '{subject_name}'.")
+                return False
 
-        sub = Subject(id=Subject.generate_subject_id(), name=subject_name)
-        sub.autoAssignMark()
-        sub.calculateGrade()
+        sub = Subject(id=Subject.generateSubjectID(), name=subject_name)
+        sub.assign_mark()
+        sub.calculate_grade()
         self.current_student.subjects.append(sub)
-        self.current_student.updateAverageMark()
-        self.current_student.determinePassFailStatus()
+        self.current_student.update_average_mark()
+        self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
@@ -131,8 +137,8 @@ class StudentSubsystem:
         removed = len(self.current_student.subjects) < before
 
         if removed:
-            self.current_student.updateAverageMark()
-            self.current_student.determinePassFailStatus()
+            self.current_student.update_average_mark()
+            self.current_student.determine_pass_fail_status()
             self.data_manager.saveData(self.all_students)
             print(f"Removed subject {subject_id} successfully.")
         else:
