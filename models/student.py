@@ -33,9 +33,9 @@ class Student:
 
 
     @staticmethod
-    def generateStudentID() -> str:
+    def genergate_student_id() -> str:
         """Get a random 6-digit Student ID from Validator"""
-        return Validator.generateStudentID()
+        return Validator.generate_student_id()
 
-    def hasMaxSubjects(self) -> bool:
+    def has_max_subjects(self) -> bool:
         return len(self.subjects) >= self.MAX_SUBJECTS
