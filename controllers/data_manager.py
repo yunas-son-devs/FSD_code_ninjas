@@ -29,16 +29,11 @@ class DataManager:
             return []
 
     def saveData(self, student_list):
-        """Save (overwrite) the full list. Return True if successful, False otherwise."""
-        try:
-            if not isinstance(student_list, list):
-                raise TypeError("saveData expects a list (e.g., list of dicts).")
-            with open(self.file_path, "wb") as f:
-                pickle.dump(student_list, f)
-            return True  # 
-        except Exception as e:
-            print(f"Error saving data: {e}")
-            return False  # 
+        """Save (overwrite) the full list. Keep it as a list of dicts for now."""
+        if not isinstance(student_list, list):
+            raise TypeError("saveData expects a list (e.g., list of dicts).")
+        with open(self.file_path, "wb") as f:
+            pickle.dump(student_list, f)
 
     def clearData(self):
         """Clear all students (set the file to [])."""
