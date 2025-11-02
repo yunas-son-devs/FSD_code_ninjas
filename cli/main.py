@@ -46,78 +46,35 @@ class System:
                 
                 result = self.subsystem.login(email, password)
                 
-                if result.get("success"):
-                    print(result["message"])
-                    # 登录成功后，跳转到新的学生主面板
+                # 兼容两种返回值类型
+                if isinstance(result, dict):
+                    if result.get("success"):
+                        print(result["message"])
+                        # 登录成功后，跳转到新的学生主面板
+                        self.student_logged_in_menu()
+                    else:
+                        print(result["message"]) # 打印失败原因
+                elif result:
+                    print("Login successful!")
                     self.student_logged_in_menu()
                 else:
-                    print(result["message"]) # 打印失败原因
+                    print("Login failed.")
 
             elif choice == 'R':
                 # --- 实际的注册流程 ---
                 name = input("Enter student name: ").strip()
                 email = input("Enter student email: ").strip()
                 password = input("Enter password: ").strip()
-                
+
                 result = self.subsystem.register(name, email, password)
-                print(result["message"])
-                
-            elif choice == 'X':
-                break
-            else:
-                print("Invalid choice.")
-    
-    # --- Admin Placeholder (Kept for compatibility) ---
-    def admin_system_menu(self):
-        # 实际代码已被 Ved 替代，此处保留兼容性。
-        while True:
-            print("\n--- Admin System Menu (Ved's Task Placeholder) ---")
-            print("X: Return to Main Menu")
-            print("--------------------------------------------------")
-            
-            choice = input("Enter your choice: ").strip().upper()
-            
-            if choice == 'X':
-                break
-            else:
-                print("Invalid choice. Please enter X.")
 
-    # --- Student Logged-In Menu (Your Logic) ---
-    def student_logged_in_menu(self):
-        while True:
-            print("\n--- Student Dashboard (Logged In) ---")
-            print("E: Enrol Subject")
-            print("V: View Enrolments")
-            print("C: Change Password")
-            print("L: Logout")
-            print("-------------------------------------")
-            
-            choice = input("Enter your choice: ").strip().upper()
-
-            if choice == 'E':
-                subject_name = input("Enter subject name to enrol: ")
-                # 使用 snake_case: enrol_subject
-                self.subsystem.enrol_subject(subject_name)
-
-            elif choice == 'C':
-                new_pass = input("Enter new password: ")
-                confirm_pass = input("Confirm new password: ")
-                # 使用 snake_case: change_password
-                self.subsystem.change_password(new_pass, confirm_pass)
-                
-            elif choice == 'V':
-                # 使用 snake_case: view_enrolments
-                enrolments = self.subsystem.view_enrolments()
-                print(f"Current Enrolments: {enrolments}")
-                
-            elif choice == 'L':
-                self.subsystem.logout()
-                break 
-
-            else:
-                print("Invalid choice. Please try again.")
-
-# Application entry point (starts the CLI when main.py is run directly)
-if __name__ == "__main__":
-    app = System()
-    app.start_cli()
+                # 兼容两种返回值类型
+                if isinstance(result, dict):
+                    # 返回字典（你之前的版本）
+                    print(result["message"])
+                elif result:
+                    # 返回 True（main 分支的版本）
+                    print("Registration successful!")
+                else:
+                    # 返回 False
+                    print("Registration fa
