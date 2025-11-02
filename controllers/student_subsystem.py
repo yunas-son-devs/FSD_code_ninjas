@@ -23,12 +23,12 @@ class StudentSubsystem:
     # ---------------- Registration/Login/Logout ----------------
     def register(self, name: str, email: str, password: str) -> bool:
         # Email validation
-        if not Validator.validateEmail(email):
+        if not Validator.validate_email(email):
             print("Registration failed: Invalid email format.")
             return False
 
         # Password validation
-        valid, msg = Validator.validatePassword(password)
+        valid, msg = Validator.validate_password(password)
         if not valid:
             print(f"Registration failed: {msg}")
             return False
@@ -40,7 +40,7 @@ class StudentSubsystem:
                 return False
 
         # Generate unique student ID
-        student_id = Validator.generateStudentID()
+        student_id = Validator.generate_student_id()
         try:
             new_student = Student(student_id, name, email, password)
         except Exception as e:
@@ -80,7 +80,7 @@ class StudentSubsystem:
         return False
 
     # ---------------- Password Management ----------------
-    def changePassword(self, new_password: str, confirm_password: str) -> bool:
+    def change_password(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
             return False
@@ -89,7 +89,7 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        valid, msg = Validator.validatePassword(new_password)
+        valid, msg = Validator.validate_password(new_password)
         if not valid:
             print(f"Password change failed: {msg}")
             return False
@@ -100,7 +100,7 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management ----------------
-    def enrolSubject(self, subject_name: str) -> bool:
+    def enrol_subject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -109,17 +109,17 @@ class StudentSubsystem:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
 
-        sub = Subject(id=Subject.generateSubjectID(), name=subject_name)
-        sub.autoAssignMark()
-        sub.calculateGrade()
+        sub = Subject(id=Subject.generate_subject_id(), name=subject_name)
+        sub.assign_mark()
+        sub.calculate_grade()
         self.current_student.subjects.append(sub)
-        self.current_student.updateAverageMark()
-        self.current_student.determinePassFailStatus()
+        self.current_student.update_average_mark()
+        self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
 
-    def removeSubject(self, subject_id: str) -> bool:
+    def remove_subject(self, subject_id: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
             return False
@@ -131,15 +131,15 @@ class StudentSubsystem:
         removed = len(self.current_student.subjects) < before
 
         if removed:
-            self.current_student.updateAverageMark()
-            self.current_student.determinePassFailStatus()
+            self.current_student.update_average_mark()
+            self.current_student.determine_pass_fail_status()
             self.data_manager.saveData(self.all_students)
             print(f"Removed subject {subject_id} successfully.")
         else:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    def viewEnrolments(self) -> List[Dict]:
+    def view_enrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")
             return []

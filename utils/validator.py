@@ -6,7 +6,7 @@ import utils.patterns as p
 class Validator:
 
     @staticmethod
-    def validateEmail(email: str) -> bool:
+    def validate_email(email: str) -> bool:
         """
         Verifies that the email follows the correct format
         Example: firstname.lastname@university.com
@@ -14,17 +14,13 @@ class Validator:
         return bool(re.fullmatch(p.EMAIL_PATTERN, email))
 
     @staticmethod
-    def validatePassword(password: str) -> bool:
-        """
-        Checks if a password meets security rules:
-        1. Starts with uppercase letter
-        2. Minimum 5 letters
-        3. Followed by at least 3 digits
-        """
-        return bool(re.fullmatch(p.PASSWORD_PATTERN, password))
+    def validate_password(password: str) -> tuple[bool, str]:
+        if not re.fullmatch(p.PASSWORD_PATTERN, password):
+            return False, "Password must start with uppercase, have 5+ letters, and 3+ digits."
+        return True, "Password is valid"
 
     @staticmethod
-    def generateStudentID(existing_ids: set = None) -> str:
+    def generate_student_id(existing_ids: set = None) -> str:
         """
         Generates a unique 6-digit student ID (000001-999999)
         Ensures no collision with existing_ids if provided
