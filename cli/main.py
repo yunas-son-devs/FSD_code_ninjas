@@ -6,7 +6,6 @@ from .admin_cli import admin_menu
 
 class System:
     def __init__(self):
-        # 确保 student_subsystem 实例名称为 subsystem
         self.subsystem = StudentSubsystem() 
 
     def start_cli(self):
@@ -18,8 +17,7 @@ class System:
             choice = input("Enter choice: ").strip().upper()
 
             if choice == 'A':
-                admin_menu() # Ved/Team's Admin Menu Call
-
+                admin_menu()
             elif choice == 'S':
                 self.student_system_menu()
             elif choice == 'X':
@@ -28,7 +26,6 @@ class System:
             else:
                 print("Invalid choice.")
 
-    # --- Student System Menu (Login/Register) ---
     def student_system_menu(self):
         while True:
             print("\n--- Student System Menu ---")
@@ -40,20 +37,16 @@ class System:
             choice = input("Enter your choice: ").strip().upper()
 
             if choice == 'L':
-                # --- 实际的登录流程 ---
                 email = input("Enter student email: ").strip()
                 password = input("Enter password: ").strip()
-                
                 result = self.subsystem.login(email, password)
                 
-                # 兼容两种返回值类型
                 if isinstance(result, dict):
                     if result.get("success"):
                         print(result["message"])
-                        # 登录成功后，跳转到新的学生主面板
                         self.student_logged_in_menu()
                     else:
-                        print(result["message"]) # 打印失败原因
+                        print(result["message"])
                 elif result:
                     print("Login successful!")
                     self.student_logged_in_menu()
@@ -61,20 +54,61 @@ class System:
                     print("Login failed.")
 
             elif choice == 'R':
-                # --- 实际的注册流程 ---
                 name = input("Enter student name: ").strip()
                 email = input("Enter student email: ").strip()
                 password = input("Enter password: ").strip()
-
                 result = self.subsystem.register(name, email, password)
 
-                # 兼容两种返回值类型
                 if isinstance(result, dict):
-                    # 返回字典（你之前的版本）
                     print(result["message"])
                 elif result:
-                    # 返回 True（main 分支的版本）
                     print("Registration successful!")
                 else:
-                    # 返回 False
-                    print("Registration fa
+                    print("Registration failed.")
+                    
+            elif choice == 'X':
+                break
+            else:
+                print("Invalid choice.")
+    
+    def admin_system_menu(self):
+        while True:
+            print("\n--- Admin System Menu ---")
+            print("X: Return to Main Menu")
+            choice = input("Enter your choice: ").strip().upper()
+            if choice == 'X':
+                break
+            else:
+                print("Invalid choice.")
+
+    def student_logged_in_menu(self):
+        while True:
+            print("\n--- Student Dashboard ---")
+            print("E: Enrol Subject")
+            print("V: View Enrolments")
+            print("C: Change Password")
+            print("L: Logout")
+            print("-------------------------")
+            
+            choice = input("Enter your choice: ").strip().upper()
+
+            if choice == 'E':
+                subject_name = input("Enter subject name: ")
+                self.subsystem.enrol_subject(subject_name)
+            elif choice == 'C':
+                new_pass = input("Enter new password: ")
+                confirm_pass = input("Confirm password: ")
+                self.subsystem.change_password(new_pass, confirm_pass)
+            elif choice == 'V':
+                enrolments = self.subsystem.view_enrolments()
+                print(f"Enrolments: {enrolments}")
+            elif choice == 'L':
+                self.subsystem.logout()
+                break 
+            else:
+                print("Invalid choice.")
+
+if __name__ == "__main__":
+    app = System()
+    app.start_cli()
+EOF
