@@ -84,9 +84,8 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        valid, msg = validator.validate_password(new_password)
-        if not valid:
-            print(f"Password change failed: {msg}")
+        if not validator.validate_password(new_password):
+            print("Password change failed: Password does not meet security requirements.")
             return False
 
         self.current_student.password = new_password
@@ -106,8 +105,8 @@ class StudentSubsystem:
 
         # Merging subject method calls from both HEAD and YOUR code:
         sub = Subject(id=validator.generate_student_id(), name=subject_name) # Using your validator for ID
-        sub.auto_assign_mark() # Assuming auto_assign_mark is the correct final name
-        sub.calculate_grade() # Assuming calculate_grade is the correct final name
+        sub.assign_mark() # Assuming auto_assign_mark is the correct final name
+        #sub.grade() # Assuming calculate_grade is the correct final name
         self.current_student.subjects.append(sub)
         
         # Assuming Student methods are also snake_case:
