@@ -19,11 +19,11 @@ class StudentSubsystem:
     # ---------------- Registration/Login/Logout (YOUR GUI-READY LOGIC) ----------------
     
     def register(self, name: str, email: str, password: str) -> Dict:
-        # Must use Snake Case: validate_email
+        # Must use Snake Case: validate_email (Assuming this is the correct final name)
         if not validator.validate_email(email):
             return {"success": False, "message": "Registration failed: Invalid email format."}
 
-        # Must use Snake Case: validate_password
+        # Must use Snake Case: validate_password 
         if not validator.validate_password(password):
             return {"success": False, "message": "Registration failed: Password does not meet security requirements."}
 
@@ -33,7 +33,7 @@ class StudentSubsystem:
                 return {"success": False, "message": "Registration failed: This email is already registered."}
 
         # 3. Create New Student Object
-        # Must use Snake Case: generate_student_id
+        # Must use Snake Case: generate_student_id 
         student_id = validator.generate_student_id()
 
         try:
@@ -75,7 +75,6 @@ class StudentSubsystem:
             return {"success": False, "message": "Error: No user is currently logged in."}
 
     # ---------------- Password Management ----------------
-    # Renamed: changePassword -> change_password
     def change_password(self, new_password: str, confirm_password: str) -> bool:
         if not self.current_student:
             print("Error: No user logged in.")
@@ -85,7 +84,6 @@ class StudentSubsystem:
             print("Passwords do not match.")
             return False
 
-        # Must use Snake Case: validate_password
         valid, msg = validator.validate_password(new_password)
         if not valid:
             print(f"Password change failed: {msg}")
@@ -97,7 +95,6 @@ class StudentSubsystem:
         return True
 
     # ---------------- Subject Management ----------------
-    # Renamed: enrolSubject -> enrol_subject
     def enrol_subject(self, subject_name: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
@@ -107,18 +104,19 @@ class StudentSubsystem:
             print(f"Cannot enrol: Maximum of {self.MAX_SUBJECTS} subjects reached.")
             return False
 
-        # Assuming all Subject methods are now snake_case for consistency:
-        sub = Subject(id=Subject.generate_student_id(), name=subject_name) 
-        sub.auto_assign_mark()
-        sub.calculate_grade()
+        # Merging subject method calls from both HEAD and YOUR code:
+        sub = Subject(id=validator.generate_student_id(), name=subject_name) # Using your validator for ID
+        sub.auto_assign_mark() # Assuming auto_assign_mark is the correct final name
+        sub.calculate_grade() # Assuming calculate_grade is the correct final name
         self.current_student.subjects.append(sub)
+        
+        # Assuming Student methods are also snake_case:
         self.current_student.update_average_mark()
         self.current_student.determine_pass_fail_status()
         self.data_manager.saveData(self.all_students)
         print(f"Enrolled in subject '{subject_name}' successfully.")
         return True
 
-    # Renamed: removeSubject -> remove_subject
     def remove_subject(self, subject_id: str) -> bool:
         if not self.current_student:
             print("Error: No student logged in.")
@@ -139,7 +137,6 @@ class StudentSubsystem:
             print(f"Subject {subject_id} not found.")
         return removed
 
-    # Renamed: viewEnrolments -> view_enrolments
     def view_enrolments(self) -> List[Dict]:
         if not self.current_student:
             print("Error: No student logged in.")

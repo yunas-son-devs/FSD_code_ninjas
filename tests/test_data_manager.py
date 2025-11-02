@@ -1,20 +1,21 @@
 from controllers.data_manager import DataManager
 
-def test_data_manager():
-    dm = DataManager("students.data")
-    dm.handleEmptyData()
-    print("Initial load:", dm.loadData())   # expect []
+def main():
+    dm = DataManager()  # uses data/students.data
 
-    sample = [{
-        "studentID": "S0001",
-        "name": "Test User",
-        "email": "test@example.com",
-        "password": "Abcde123",
-        "subjects": [{"subjectID": "IS101", "mark": 85, "grade": "HD"}]
-    }]
+    # 1) start clean
+    dm.clearData()
+    print("After clear:", dm.loadData())  # expect []
+
+    # 2) save a small list
+    sample = [
+        {"studentID": "S0001", "name": "Test User",
+         "subjects": [{"subjectID": "IS101", "mark": 85}]}
+    ]
     dm.saveData(sample)
-    print("After save:", dm.loadData())
-    print("OK ✓")
+
+    # 3) read back
+    print("After save:", dm.loadData())   # expect the same list
 
 if __name__ == "__main__":
-    test_data_manager()
+    main()

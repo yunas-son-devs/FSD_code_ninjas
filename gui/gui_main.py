@@ -1,67 +1,57 @@
-# gui/gui_main.py (Temporary Working Skeleton for Integration)
+# gui/gui_main.py (Conflict Resolved Version)
 
 import tkinter as tk
 from tkinter import messagebox
+from .login_frame import LoginFrame
+from .enrol_frame import EnrolmentFrame # Assuming this is the correct name
+from .subject_frame import SubjectFrame
+from controllers.student_subsystem import StudentSubsystem
 
-# 导入您的 StudentSubsystem 类 (假设路径正确)
-from controllers.student_subsystem import StudentSubsystem 
-
-class GUI_App(tk.Tk):
+class GUIUniApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("University App Login")
-        self.geometry("300x200")
-
-        # 实例化您的 StudentSubsystem
-        self.student_subsystem = StudentSubsystem()
-
-        # --- 假设的输入字段 ---
-        # 实际中 Yuna 会提供这些，但我们现在用占位符
-        self.email_entry = tk.Entry(self)
-        self.password_entry = tk.Entry(self, show="*")
+        self.title("University Student App")
+        self.geometry("600x400")  # Window size (optional)
         
-        tk.Label(self, text="Email:").pack()
-        self.email_entry.pack()
-        tk.Label(self, text="Password:").pack()
-        self.password_entry.pack()
+        # 确保只实例化一次 StudentSubsystem
+        self.student_subsystem = StudentSubsystem()  
+        
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-        # --- 登录按钮 (挂载事件处理函数) ---
-        self.login_button = tk.Button(
-            self, 
-            text="Login", 
-            command=self.handle_login_click # <--- 按钮点击时调用这个函数
-        )
-        self.login_button.pack(pady=10)
+        self.frames = {}
+        
+        # --- Add frames ---
+        # 整合您和团队的界面框架
+        for F in (LoginFrame, EnrolmentFrame, SubjectFrame): 
+            page_name = F.__name__
+            # 将 subsystem 实例传递给每个框架
+            frame = F(parent=container, app=self, subsystem=self.student_subsystem)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
-    # --- 您的事件处理函数和逻辑 ---
-    
-    # 1. 按钮点击事件处理函数
-    def handle_login_click(self):
-        # A. 从 GUI 界面获取输入值
-        email = self.email_entry.get()
-        password = self.password_entry.get()
+        self.show_frame("LoginFrame")  # Start with LoginFrame
 
-        # B. 调用您的 StudentSubsystem 登录逻辑
-        result = self.student_subsystem.login(email, password)
-
-        # C. 根据返回结果显示弹窗
-        if result["success"]:
-            # 成功
-            messagebox.showinfo("Login Success", result["message"])
-            self.switch_to_dashboard() # 假设成功后跳转到主界面
-        else:
-            # 失败
-            messagebox.showerror("Login Failed", result["message"])
-
-    # 2. 占位符函数（用于测试流程）
-    def switch_to_dashboard(self):
-        # 模拟成功登录后要做的事情
-        print("Login Successful. Now switching to the main application dashboard (placeholder).")
-        # 通常会销毁当前窗口或切换框架
-        self.destroy() 
+    def show_frame(self, page_name):
+        """Display the frame corresponding to the given page name."""
+        frame = self.frames[page_name]
+        frame.tkraise()
+        # Refresh data when switching to EnrolmentFrame
+        if page_name == "EnrolmentFrame":
+            # Assuming EnrolmentFrame has a method to refresh data
+            # frame.refresh_data() 
+            pass 
+            
+    def on_login_success(self, student):
+        """Called after a successful login to switch to the EnrolmentFrame."""
+        # 登录成功后切换到选课界面
+        self.show_frame("EnrolmentFrame")
 
 
-# 程序启动入口
+# --- Run the application ---
 if __name__ == "__main__":
-    app = GUI_App()
+    # StudentSubsystem 已经在 GUIUniApp 的 __init__ 中实例化，此处无需重复
+    app = GUIUniApp()
     app.mainloop()
