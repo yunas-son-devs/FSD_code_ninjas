@@ -1,3 +1,4 @@
+# controllers/admin_subsystem.py
 from typing import Any, Dict, List
 from controllers.data_manager import DataManager
 from utils.academic_service import AcademicService
@@ -6,7 +7,6 @@ class AdminSubsystem:
     def __init__(self):
         self.data_manager = DataManager()
 
-    # --- public API ---
     def view_all_students(self) -> List[Any]:
         return self.data_manager.loadData()
 
@@ -14,10 +14,10 @@ class AdminSubsystem:
         students = self.data_manager.loadData()
         idx = self._find_index(students, student_id)
         if idx is None:
-            return False, f"Student '{student_id}' not found."
+            return False, f"Student {student_id} does not exist"
         students.pop(idx)
         self.data_manager.saveData(students)
-        return True, f"Student '{student_id}' removed."
+        return True, f"Student {student_id} removed"
 
     def organise_by_grade(self) -> Dict[str, List[Any]]:
         groups: Dict[str, List[Any]] = {"HD": [], "D": [], "C": [], "P": [], "F": []}
@@ -33,7 +33,30 @@ class AdminSubsystem:
             result[status].append(s)
         return result
 
-    # --- helpers ---
+    def clear_students(self) -> None:
+        """Erase the students database (explicit action only)."""
+        self.data_manager.clear()
+
+    def summarize_student(self, s: Any) -> Dict[str, Any]:
+        sid = self._get(s, "id") or self._get(s, "studentID") or "?"
+        name = self._get(s, "name", "?")
+        email = self._get(s, "email", "?")
+        avg = self._avg_for(s) or 0.0
+        grade = self._grade_for(s)
+        pf = self._pass_fail_for(s)
+        return {
+            "id": sid,
+            "name": name,
+            "email": email,
+            "avg": float(avg),
+            "grade": grade,
+            "passfail": pf,
+            "subjects_count": len(self._subjects(s)),
+        }
+
+    def summaries(self) -> List[Dict[str, Any]]:
+        return [self.summarize_student(s) for s in self.view_all_students()]
+
     def _find_index(self, students: List[Any], sid: str) -> int | None:
         for i, s in enumerate(students):
             if self._get(s, "studentID") == sid or self._get(s, "id") == sid:
