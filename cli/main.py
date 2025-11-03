@@ -111,4 +111,3 @@ class System:
 if __name__ == "__main__":
     app = System()
     app.start_cli()
-EOF
