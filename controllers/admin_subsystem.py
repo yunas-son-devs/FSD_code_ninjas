@@ -7,7 +7,6 @@ class AdminSubsystem:
     def __init__(self):
         self.data_manager = DataManager()
 
-    # --- public API ---
     def view_all_students(self) -> List[Any]:
         return self.data_manager.loadData()
 
@@ -35,10 +34,9 @@ class AdminSubsystem:
         return result
 
     def clear_students(self) -> None:
-        """Erase the students database (used by CLI after confirmation)."""
-        self.data_manager.saveData([])
+        """Erase the students database (explicit action only)."""
+        self.data_manager.clear()
 
-    # --- new public helpers for CLI formatting ---
     def summarize_student(self, s: Any) -> Dict[str, Any]:
         sid = self._get(s, "id") or self._get(s, "studentID") or "?"
         name = self._get(s, "name", "?")
@@ -59,7 +57,6 @@ class AdminSubsystem:
     def summaries(self) -> List[Dict[str, Any]]:
         return [self.summarize_student(s) for s in self.view_all_students()]
 
-    # --- helpers ---
     def _find_index(self, students: List[Any], sid: str) -> int | None:
         for i, s in enumerate(students):
             if self._get(s, "studentID") == sid or self._get(s, "id") == sid:

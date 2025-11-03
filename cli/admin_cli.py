@@ -2,7 +2,6 @@
 from typing import Any, List, Dict
 from controllers.admin_subsystem import AdminSubsystem
 
-# ---- simple ANSI styling (works in VS Code terminal/Windows 10+ PowerShell) ----
 class S:
     B = "\033[1m"
     DIM = "\033[2m"
