@@ -29,9 +29,9 @@ class DataManager:
             return []
 
     def saveData(self, student_list):
-        """Save (overwrite) the full list. Keep it as a list of dicts for now."""
+        """Save (overwrite) the full list. Keep it as a list of dicts/objects for now."""
         if not isinstance(student_list, list):
-            raise TypeError("saveData expects a list (e.g., list of dicts).")
+            raise TypeError("saveData expects a list (e.g., list of dicts/objects).")
         with open(self.file_path, "wb") as f:
             pickle.dump(student_list, f)
 
@@ -39,6 +39,10 @@ class DataManager:
         """Clear all students (set the file to [])."""
         with open(self.file_path, "wb") as f:
             pickle.dump([], f)
+
+    # ---- compatibility alias (so Admin code can call either .clear() or .clearData()) ----
+    def clear(self):
+        self.clearData()
 
     def backupData(self, suffix=".bak"):
         """Create a simple backup next to the main file."""
