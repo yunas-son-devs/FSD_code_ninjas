@@ -57,10 +57,6 @@ class LoginFrame(tk.Frame):
             self.password_entry.delete(0, tk.END)
         else:
             mb.showerror("Error", "Registration failed", parent=self)
-    
+
     def admin_access(self):
-        pw = askstring("Admin Access", "Enter admin password:", show="*", parent=self)
-        if pw == "Abcde123":
-            self.app.open_admin()
-        else:
-            mb.showerror("Admin Access", "Incorrect admin password", parent=self)
+        self.app.open_admin() 
