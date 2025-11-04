@@ -1,7 +1,16 @@
 from controllers.student_subsystem import StudentSubsystem
-from colorama import Fore, init
+# --- robust colorama import (works even if metadata is weird) ---
+try:
+    import colorama
+    colorama.init(autoreset=True)
+    Fore = colorama.Fore
+    Style = colorama.Style
+except Exception:
+    class _Fore: RED = GREEN = CYAN = YELLOW = ""
+    class _Style: RESET_ALL = ""
+    Fore, Style = _Fore(), _Style()
+# ----------------------------------------------------------------
 
-init(autoreset=True)
 
 
 def student_login(subsystem: StudentSubsystem):

@@ -1,10 +1,19 @@
 # cli/enrol_cli.py
-from controllers.student_subsystem import StudentSubsystem
-from colorama import Fore, init
+try:
+    import colorama
+    colorama.init(autoreset=True)
+    Fore = colorama.Fore
+    Style = colorama.Style
+except Exception:
+    class _Fore: RED = GREEN = CYAN = YELLOW = ""
+    class _Style: RESET_ALL = ""
+    Fore, Style = _Fore(), _Style()
 
-init(autoreset=True)
 
-def subject_menu(subsystem: StudentSubsystem):
+
+
+def subject_menu(subsystem: "StudentSubsystem"):
+
     if not subsystem.current_student:
         print(Fore.RED + "No student logged in.")
         return
@@ -46,29 +55,27 @@ def subject_menu(subsystem: StudentSubsystem):
 
             while True:
                 print(Fore.CYAN + "\nEnrolled subjects:")
-                for i, sub in enumerate(subjects, 1):
-                    print(f"{i}. {sub['name']} (ID: {sub['id']})")
-                
-                user_input = input("Enter the subject number to remove (or 'x' to cancel): ").strip()
+                for sub in subjects:
+                    print(f"- {sub['name']} (ID: {sub['id']})")
+
+                user_input = input("Enter the Subject ID to remove (or 'x' to cancel): ").strip()
 
                 if user_input.lower() == 'x':
                     break
 
-                try:
-                    idx = int(user_input)
-                    if 1 <= idx <= len(subjects):
-                        removed = subsystem.remove_subject(subjects[idx - 1]["id"])
-                        if removed:
-                            print(Fore.GREEN + f"Subject '{subjects[idx - 1]['name']}' removed successfully.")
-                            subjects = subsystem.view_enrolments()
-                        else:
-                            print(Fore.RED + "Removal failed. Try again.")
-                        break
-                    else:
-                        print(Fore.RED + "Invalid number. Please enter a valid subject number.")
-                except ValueError:
-                    print(Fore.RED + "Invalid input. Please enter a number corresponding to a subject.")
+                # Find subject by ID
+                subject_to_remove = next((s for s in subjects if str(s["id"]) == user_input), None)
 
+                if subject_to_remove:
+                    removed = subsystem.remove_subject(subject_to_remove["id"])
+                    if removed:
+                        print(Fore.GREEN + f"Subject '{subject_to_remove['name']}' removed successfully.")
+                        subjects = subsystem.view_enrolments()
+                    else:
+                        print(Fore.RED + "Removal failed. Try again.")
+                    break  # back to enrolment menu
+                else:
+                    print(Fore.RED + "Invalid Subject ID. Please enter a valid one.")
         elif choice == 's':
             subjects = subsystem.view_enrolments()
             if not subjects:
