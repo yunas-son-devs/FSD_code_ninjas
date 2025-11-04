@@ -14,11 +14,7 @@ class LoginFrame(tk.Frame):
         self.email_entry.pack(pady=2)
 
         tk.Label(self, text="Password").pack(pady=(8, 2))
-<<<<<<< HEAD
         self.password_entry = tk.Entry(self, show="*", width=32)
-=======
-        self.password_entry = tk.Entry(self, width=32)
->>>>>>> origin/main
         self.password_entry.pack(pady=2)
 
         row = tk.Frame(self)
@@ -63,8 +59,4 @@ class LoginFrame(tk.Frame):
             mb.showerror("Error", "Registration failed")
 
     def admin_access(self):
-        pw = askstring("Admin Access", "Enter admin password:", show="*")
-        if pw == "Abcde123":
-            self.app.open_admin()
-        else:
-            mb.showerror("Admin Access", "Incorrect admin password")
+        self.app.open_admin()
