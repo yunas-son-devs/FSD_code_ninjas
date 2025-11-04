@@ -11,28 +11,41 @@ Data Persistence: All student and admin data is stored in students.data using CR
 
 ## Project Structure
 ```
-FSD_UniversityApp/
-├── cli/ # CLI-related code
-│ └── main.py # CLI entry point
-├── gui/ # GUI-related code
-│ └── gui_main.py # GUI entry point
-├── models/ # Student, Subject, Admin classes
-│ ├── student.py
-│ ├── subject.py
-│ └── admin.py
-├── controllers/ # Subsystem logic
-│ ├── student_subsystem.py
-│ └── admin_subsystem.py
-├── utils/ # Utilities like Validator
-│ └── validator.py
-├── tests/ # Test scripts
-│ ├── test_admin.py
-│ ├── test_student.py
-│ └── test_data_manager.py
-├── data/ # students.data storage
-│ └── students.data
-├── requirements.txt # Python dependencies
-└── README.md # Project description
+FSD_code_ninjas/
+├── cli/ # Code for the Command-Line Interface (CLI)
+│   ├── __init__.py
+│   ├── admin_cli.py
+│   ├── enrol_cli.py
+│   ├── login_cli.py
+│   └── main.py # CLI entry point
+├── controllers/ # Application logic and system management
+│   ├── admin_subsystem.py
+│   ├── data_manager.py # Handles file I/O for students.data
+│   └── student_subsystem.py
+├── data/
+│   └── students.data # The main data file for persistence
+├── document/ # Project documentation files
+│   └── groupCoding Ninjas-Cmp1.pdf
+├── gui/ # Code for the Graphical User Interface (GUI)
+│   ├── __init__.py
+│   ├── admin_frame.py
+│   ├── enrol_frame.py
+│   ├── exception_frame.py
+│   ├── gui_main.py # GUI entry point
+│   ├── login_frame.py
+│   └── subject_frame.py
+├── models/ # Data structure classes for the application
+│   ├── admin.py
+│   ├── student.py
+│   └── subject.py
+├── utils/ # Common utility functions (validation, services, patterns)
+│   ├── academic_service.py
+│   ├── patterns.py
+│   └── validator.py
+├── .gitignore # Specifies files to be ignored by Git
+├── LICENSE
+├── README.md # This file
+└── requirements.txt # Python dependencies
 ```
 
 ## Getting Started
@@ -45,7 +58,7 @@ Python 3.8+ is required to run this application. You can download it from the of
 
 ```
 git clone git@github.com:yunas-son-devs/FSD_code_ninjas.git
-cd FSD_UniversityApp
+cd FSD_code_ninjas/
 ```
 
 **3. Set up the Environment**
@@ -76,17 +89,11 @@ Choose between the CLI and GUI version.
 
 **Command-Line Interface (CLI)**
 ```
-python cli/main.py
+python -m cli.main
 ```
 **Graphical User Interface (GUI)**
 ```
-python gui/gui_main.py
-```
-
-### Testing
-To run the automated tests, ensure you have pytest installed (pip install pytest) and then execute the following command:
-```
-pytest tests/
+python -m gui.gui_main
 ```
 
 ## Git Workflow
