@@ -1,5 +1,18 @@
 # cli/main.py
 from controllers.student_subsystem import StudentSubsystem
+# --- robust colorama import (works even if metadata is weird) ---
+try:
+    import colorama
+    colorama.init(autoreset=True)
+    Fore = colorama.Fore
+    Style = colorama.Style
+except Exception:
+    # Fallback: no-color mode so CLI still runs
+    class _Fore: RED = GREEN = CYAN = YELLOW = ""
+    class _Style: RESET_ALL = ""
+    Fore, Style = _Fore(), _Style()
+# ----------------------------------------------------------------
+
 from .login_cli import student_login, student_register
 from .enrol_cli import subject_menu
 from .admin_cli import admin_menu
@@ -10,22 +23,28 @@ class System:
 
     def start_cli(self):
         while True:
-            print("\n=== University CLI ===")
-            print("A: Admin System")
-            print("S: Student System")
-            print("X: Exit")
-            choice = input("Enter choice: ").strip().upper()
+            print(Fore.CYAN + """
+==================================
+  Welcome to University App CLI
+==================================
+A: Admin System
+S: Student System
+X: Exit
+----------------------------------
+""")
+
+            choice = input(Fore.YELLOW + "Enter choice: ").strip().upper()
 
             if choice == 'A':
                 admin_menu()
-
             elif choice == 'S':
                 self.student_system_menu()
             elif choice == 'X':
-                print("Goodbye!")
+                print(Fore.GREEN + "Goodbye!")
                 break
             else:
-                print("Invalid choice.")
+                print(Fore.RED + "Invalid choice.")
+
 
     def student_system_menu(self):
         while True:
@@ -43,7 +62,7 @@ class System:
             elif choice == 'X':
                 break
             else:
-                print("Invalid choice.")
+                print(Fore.RED + "Invalid choice.")
 
 if __name__ == "__main__":
     app = System()

@@ -14,7 +14,11 @@ class LoginFrame(tk.Frame):
         self.email_entry.pack(pady=2)
 
         tk.Label(self, text="Password").pack(pady=(8, 2))
+<<<<<<< HEAD
         self.password_entry = tk.Entry(self, show="*", width=32)
+=======
+        self.password_entry = tk.Entry(self, width=32)
+>>>>>>> origin/main
         self.password_entry.pack(pady=2)
 
         row = tk.Frame(self)
