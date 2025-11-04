@@ -41,26 +41,26 @@ class LoginFrame(tk.Frame):
             mb.showerror(title="Login Error", message="Incorrect email or password")
 
     def register(self):
-        name = askstring("Register", "Enter your name")
+        name = askstring("Register", "Enter your name", parent=self)
         if not name:
             return
-        email = askstring("Register", "Enter your email")
+        email = askstring("Register", "Enter your email", parent=self)
         if not email:
             return
-        password = askstring("Register", "Enter your password")
+        password = askstring("Register", "Enter your password", parent=self)
         if not password:
             return
         if self.subsystem.register(name, email, password):
-            mb.showinfo("Success", "Registration successful")
+            mb.showinfo("Success", "Registration successful", parent=self)
             self.email_entry.delete(0, tk.END)
             self.email_entry.insert(0, email)
             self.password_entry.delete(0, tk.END)
         else:
-            mb.showerror("Error", "Registration failed")
-
+            mb.showerror("Error", "Registration failed", parent=self)
+    
     def admin_access(self):
-        pw = askstring("Admin Access", "Enter admin password:", show="*")
+        pw = askstring("Admin Access", "Enter admin password:", show="*", parent=self)
         if pw == "Abcde123":
             self.app.open_admin()
         else:
-            mb.showerror("Admin Access", "Incorrect admin password")
+            mb.showerror("Admin Access", "Incorrect admin password", parent=self)
