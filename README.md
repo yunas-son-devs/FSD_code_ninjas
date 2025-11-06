@@ -87,7 +87,7 @@ python -m gui.gui_main
 ![CLI Demo](https://github.com/user-attachments/assets/49ca16c2-f2be-4dc7-b12e-022f7f2ac01b)
 
 ## GUI Demo
-![GUI Demo](https://github.com/user-attachments/assets/b26d62bb-26d5-4a56-890d-709126070181)
+![GUI Demo](https://github.com/user-attachments/assets/33b20f58-96ed-4beb-9051-bab90f63a6ae)
 
 #### Student Functions
 - Register and log in
