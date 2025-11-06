@@ -140,11 +140,11 @@ class EnrolmentFrame(tk.Frame):
 
     def change_password(self):
         """Handle the Change Password workflow using simpledialog."""
-        new_pw = askstring("Change Password", "Enter new password:")
+        new_pw = askstring("Change Password", "Enter new password:", parent=self)
         if not new_pw:
             return
 
-        confirm_pw = askstring("Change Password", "Confirm new password:")
+        confirm_pw = askstring("Change Password", "Confirm new password:", parent=self)
         if not confirm_pw:
             return
 
