@@ -1,11 +1,11 @@
 # FSD Assignment - University Student Management App
 ## Project Overview
-This project is an interactive university student/admin system developed for the Fundamentals of Software Development (FSD) group assignment. It provides both a command-line interface (CLI) and a graphical user interface (GUI) for managing student data.
+This project is an interactive university student/admin system developed for the Fundamentals of Software Development (FSD) group assignment. It provides both a command-line interface (CLI) and a graphical user interface (GUI) for students and admins.
 
 ## Features
 Student Functions: Register, login, enrol/drop subjects, change passwords, and view enrolments.
 
-Admin Functions: Manage student data, group students by grade, partition Pass/Fail, and clear all data.
+Admin Functions: View and manage all student records, remove students, group students by grade, categorise them by pass or fail status, summarise academic results, and clear student data.
 
 Data Persistence: All student and admin data is stored in students.data using CRUD operations.
 
@@ -49,70 +49,61 @@ FSD_code_ninjas/
 ```
 
 ## Getting Started
-Follow these steps to set up and run the project.
 
-**1. Prerequisites**
-Python 3.8+ is required to run this application. You can download it from the official Python website.
+### 1. Prerequisites
+- Python 3.8 or higher must be installed.
 
-**2. Clone the Repository**
+### 2. Download the Project
+1. Download the `FSD_code_ninjas.zip` file.
+2. Unzip it to your preferred folder on your computer.
 
-```
-git clone git@github.com:yunas-son-devs/FSD_code_ninjas.git
-cd FSD_code_ninjas/
-```
+### 3. Install Required Packages
+1. Open **Terminal** (Mac/Linux) or **Command Prompt** (Windows).
+2. Navigate to the unzipped project folder:
+   ```
+   cd FSD_code_ninjas
+   ```
+3. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
 
-**3. Set up the Environment**
-It's highly recommended to use a virtual environment to manage dependencies.
+### 4. Run the Application
+You can choose between two modes:
 
-### Create a virtual environment
-python -m venv venv
-
-### Activate the virtual environment
-**On Windows:**
-```
-venv\Scripts\activate
-```
-
-**On Mac/Linux:**
-```
-source venv/bin/activate
-```
-
-**4. Install Dependencies**
-This command installs all necessary libraries listed in requirements.txt.
-```
-pip install -r requirements.txt
-```
-
-### How to Run the App
-Choose between the CLI and GUI version.
-
-**Command-Line Interface (CLI)**
+#### Command-Line Interface (CLI)
 ```
 python -m cli.main
 ```
-**Graphical User Interface (GUI)**
+
+#### Graphical User Interface (GUI)
 ```
 python -m gui.gui_main
 ```
 
-## Git Workflow
-Use a dedicated branch for each new feature or task.
-The main branch should always be stable and ready for deployment.
+### 5. How to Use
 
-### Create and switch to a new feature branch
-```
-git checkout -b feature/<your-feature-name>
-```
+## CLI Demo
+![CLI Demo](https://github.com/user-attachments/assets/49ca16c2-f2be-4dc7-b12e-022f7f2ac01b)
 
-### Initial setup & commit
-```
-git init
-git add .
-git commit -m "feat: [Feature] Description of feature"
-```
+## GUI Demo
+![GUI Demo](https://github.com/user-attachments/assets/49ca16c2-f2be-4dc7-b12e-022f7f2ac01b)
 
-### Push your branch and create a Pull Request (PR)
+#### Student Functions
+- Register and log in
+- Enrol or remove subjects (up to 4)
+- View grades, average mark, and pass/fail status
+- Change password securely
+
+#### Admin Functions
+- View all registered students
+- Group students by grade (HD/D/C/P/F)
+- Categorise by Pass/Fail
+- Remove a student or clear all data
+
+### 6. Data Storage
+All information is automatically stored in:
 ```
-git push origin feature/<your-feature-name>
+data/students.data
 ```
+This ensures your student and admin data are saved persistently between sessions.
